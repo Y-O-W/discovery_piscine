@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe</title>    
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="game-wrapper">
+            <header class="game-header">
+        <h1>ASCII ARENA -TIC TAC TOE</h1>        
+        <div class="alert-banner success-alert">🏆 Game Over! Alice won!</div>
+
+        <div class="turn-indicator">
+          <span class="active-player bob-text">Alice's turn : </span>
+          <span class="active-player alice-text">Choose a space (1-9) </span>
+        </div>
+      </header>
+
+      <section class="scoreboard">
+        <div class="score-card alice-card pop-animation">
+          <span class="player-name">Alice</span>
+          <span class="player-symbol">X</span>
+          <div class="score-badge">3</div>
+        </div>
+
+        <div class="score-card tie-card">
+          <span class="player-name">Ties</span>
+          <span class="player-symbol">-</span>
+          <div class="score-badge">1</div>
+        </div>
+
+        <div class="score-card bob-card">
+          <span class="player-name">Bob</span>
+          <span class="player-symbol">O</span>
+          <div class="score-badge">2</div>
+        </div>
+      </section>
+
+      <!-- 3x3  Board Layout  -->
+      <main class="board-container">
+        <div class="grid-board">
+          <button class="cell marked-x move-bounce winning-cell" disabled>
+            X
+          </button>
+          <button class="cell marked-x move-bounce winning-cell" disabled>
+            X
+          </button>
+          <button class="cell marked-x move-bounce winning-cell" disabled>
+            X
+          </button>
+
+          <button class="cell marked-o move-bounce" disabled>O</button>
+          <button class="cell empty"></button>
+          <button class="cell empty"></button>
+
+          <button class="cell marked-o move-bounce" disabled>O</button>
+          <button class="cell empty"></button>
+          <button class="cell empty"></button>
+        </div>
+      </main>
+
+      <footer class="action-bar">
+        <button class="btn btn-secondary">Reset Score</button>
+        <button class="btn btn-primary">Play Again</button>
+      </footer>
+    </div>
+  </body>
+</html>
