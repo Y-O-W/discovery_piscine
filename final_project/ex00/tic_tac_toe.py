@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# A text-based tic-tac-toe game.
 
 RESET = "\033[0m"
 BOLD = "\033[1m"
