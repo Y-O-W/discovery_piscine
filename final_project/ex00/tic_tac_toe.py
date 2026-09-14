@@ -155,6 +155,6 @@ def play_session():
         if answer.upper() == "STOP":
             break
 
-# Output - Start Session: entry point, only runs when this file is executed directly
+# Execution - Start Session: entry point, only runs when this file is executed directly
 if __name__ == "__main__":
     play_session()
