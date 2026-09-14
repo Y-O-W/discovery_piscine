@@ -50,6 +50,13 @@ Each player is assigned one persistent color (e.g. Player 1/X = cyan, Player 2/O
 - **Stopped early**: dimmed/gray, board frozen exactly as it stood.
 This keeps the palette coherent (two meanings — who / what happened — rather than an arbitrary color per state) and was chosen directly in response to the requirement that all three outcomes be visually distinguishable from each other.
 
+**Player identity as one nested dict (`PLAYERS[n]`), not parallel constants.**
+Settled during implementation (issues #2/#5), after starting from a standalone `PLAYER_COLORS` constant. `PLAYERS` is keyed by player number, same as `PLAYER_COLORS`/`WINNING_LINES`, but each value is itself a dict holding everything about that player: `{"name": ..., "wins": 0, "color": ..., "mark": ...}`. This groups "everything about one entity" under a single lookup (`PLAYERS[current]["color"]` reads next to `PLAYERS[current]["name"]`) instead of separate parallel dicts keyed the same way.
+Trade-off accepted knowingly: `color` and `mark` are fixed for the life of the session (assigned once, at player creation) while `wins` mutates every round — so this dict mixes a constant-ish field with genuinely-changing state. Not wrong in Python (no type distinction enforced), but worth being able to explain live if asked why some fields never change while others do. The alternative — separate `PLAYER_COLORS`/`PLAYER_MARKS` module constants plus a `PLAYERS` dict for just name/wins — was rejected because it splits per-player facts across three lookups instead of one, for no functional gain.
+
+**`play_round()` returns a consistent 4-tuple regardless of outcome.**
+`(outcome, winner, line, board)` is always the shape, with unused slots as `None` (e.g. `("STOP", None, None, board)`, `("DRAW", None, None, board)`). This lets `play_session()` always unpack the same four names after every call, rather than branching on how many values come back depending on what happened. It also keeps `play_round()` focused purely on round mechanics — it never touches the tally or prints anything outcome-specific; that's entirely `play_session()`'s job, matching the SESSION/ROUND loop separation described above.
+
 ## Risks / Trade-offs
 
 - **STOP's context-dependent scope could read as non-compliant to a literal-minded grader** (the spec sentence "stop and exit... if a user inputs STOP" could be read as "exits the whole program immediately") → Mitigation: this is precisely the tension flagged in Context; the presentation should lead with *why* the two-scope reading was chosen (it's the only reading under which the cross-round tally requirement is satisfiable at all).
@@ -58,5 +65,6 @@ This keeps the palette coherent (two meanings — who / what happened — rather
 
 ## Open Questions
 
-- Exact color codes (which ANSI code for each player, draw, stop) and exact banner wording/art — left as implementation-time detail, not a spec-level decision.
 - Assumed terminal width for the box-drawn board — standard 80 columns is more than sufficient for a 3x3 board and not expected to be a constraint.
+
+**Resolved during implementation:** exact color codes (Player 1/X = cyan `\033[36m`, Player 2/O = magenta `\033[35m`, draw = white `\033[37m`, stop = gray `\033[90m`) and banner wording — both settled as ordinary implementation choices, no design-level tension involved. See the `PLAYERS` nested-dict decision above for where the colors actually live at runtime.
